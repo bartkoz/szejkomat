@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"google.golang.org/api/sheets/v4"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 
 	"google.golang.org/api/option"
+	"google.golang.org/api/sheets/v4"
 )
 
 const (
@@ -51,7 +52,8 @@ func main() {
 		}
 	}
 
-	// Log the total number of links to process
+	shuffleLinks(links)
+
 	fmt.Printf("Found %d links to process.\n", len(links))
 
 	// Iterate through each link, making GET requests with a delay
@@ -72,4 +74,11 @@ func main() {
 	}
 
 	fmt.Println("Finished processing all links.")
+}
+
+func shuffleLinks(links []string) {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(links), func(i, j int) {
+		links[i], links[j] = links[j], links[i]
+	})
 }
